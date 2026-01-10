@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Story • EMAITHWORLD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #ffd6e8; /* Pink background */
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff0f5;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #e75480;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #d94370;
+    }
+    .chapterCard {
+      background: #ffe0f0;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    h1, h2 {
+      color: #e75480;
+    }
+    a.back {
+      display: inline-block;
+      margin-top: 15px;
+      color: #e75480;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📖 Our Story</h1>
+
+    <textarea id="chapterInput" placeholder="Write the next chapter here..."></textarea>
+    <button onclick="saveChapter()">Save Chapter 💖</button>
+
+    <h2>All Chapters:</h2>
+    <div id="chaptersList"></div>
+
+    <a class="back" href="dashboard.html">Back to Dashboard</a>
+  </div>
+
+  <script type="module">
+    import { db } from './firebase.js';
+    import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const chaptersCol = collection(db, 'storyChapters');
+    const chaptersList = document.getElementById('chaptersList');
+    const chapterInput = document.getElementById('chapterInput');
+
+    async function saveChapter() {
+      const text = chapterInput.value.trim();
+      if (!text) return alert("Please type something 📖");
+
+      const user = localStorage.getItem("emaithUser") || "Anonymous";
+
+      await addDoc(chaptersCol, {
+        author: user,
+        message: text,
+        createdAt: serverTimestamp()
+      });
+
+      chapterInput.value = '';
+      loadChapters();
+    }
+
+    async function loadChapters() {
+      chaptersList.innerHTML = '';
+      const q = query(chaptersCol, orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+
+      snapshot.forEach(doc => {
+        const chapter = doc.data();
+        const div = document.createElement('div');
+        div.className = 'chapterCard';
+        div.innerHTML = `<strong>${chapter.author}:</strong> ${chapter.message}`;
+        chaptersList.appendChild(div);
+      });
+    }
+
+    loadChapters();
+  </script>
+</body>
+</html>

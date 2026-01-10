@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Story • EMAITHWORLD</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff0f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #e75480;
+    }
+
+    .chapter-form {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    input, textarea, select, button {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    button {
+      background: #e75480;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .chapter {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 600px;
+      margin: 15px auto;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .meta {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+
+    .delete {
+      color: red;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .locked {
+      font-size: 12px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📖 Our Story Chapters</h1>
+
+<div class="chapter-form">
+  <input type="text" id="title" placeholder="Chapter title (e.g. How We Met)">
+  <input type="date" id="date">
+  <select id="author">
+    <option value="Emmy">Written by Emmy</option>
+    <option value="Faith">Written by Faith</option>
+  </select>
+  <textarea id="story" rows="5" placeholder="Write your story here..."></textarea>
+  <button onclick="addChapter()">Save Chapter</button>
+</div>
+
+<div id="chapters"></div>
+
+<script>
+  const chaptersDiv = document.getElementById("chapters");
+
+  function loadChapters() {
+    chaptersDiv.innerHTML = "";
+    const chapters = JSON.parse(localStorage.getItem("storyChapters")) || [];
+
+    chapters.forEach((c, index) => {
+      const daysPassed = (Date.now() - c.time) / (1000 * 60 * 60 * 24);
+      const locked = daysPassed > 30;
+
+      const div = document.createElement("div");
+      div.className = "chapter";
+
+      div.innerHTML = `
+        <h3>${c.title}</h3>
+        <div class="meta">${c.date} • ${c.author}</div>
+        <p>${c.text}</p>
+        ${locked 
+          ? '<div class="locked">🔒 This chapter is locked forever</div>' 
+          : `<div class="delete" onclick="deleteChapter(${index})">Delete</div>`
+        }
+      `;
+
+      chaptersDiv.appendChild(div);
+    });
+  }
+
+  function addChapter() {
+    const title = document.getElementById("title").value;
+    const date = document.getElementById("date").value;
+    const author = document.getElementById("author").value;
+    const text = document.getElementById("story").value;
+
+    if (!title || !date || !text) return alert("Please fill all fields");
+
+    const chapters = JSON.parse(localStorage.getItem("storyChapters")) || [];
+
+    chapters.push({
+      title,
+      date,
+      author,
+      text,
+      time: Date.now()
+    });
+
+    localStorage.setItem("storyChapters", JSON.stringify(chapters));
+
+    document.getElementById("title").value = "";
+    document.getElementById("story").value = "";
+
+    loadChapters();
+  }
+
+  function deleteChapter(index) {
+    const chapters = JSON.parse(localStorage.getItem("storyChapters"));
+    chapters.splice(index, 1);
+    localStorage.setItem("storyChapters", JSON.stringify(chapters));
+    loadChapters();
+  }
+
+  loadChapters();
+</script>
+
+</body>
+</html>

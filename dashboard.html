@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EMAITHWORLD Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e75480">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #ffd6e8, #fff0f5);
+    }
+
+    .header {
+      background: #e75480;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+
+    .card h3 {
+      margin: 0;
+      color: #e75480;
+    }
+
+    .card p {
+      margin: 5px 0 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      margin: 20px 0;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>🌍 EMAITHWORLD</h1>
+    <p>Welcome Home 🤍</p>
+  </div>
+
+  <!-- WELCOME USER -->
+  <h2 id="welcomeUser" style="text-align:center; color:#e75480; margin:20px 0;"></h2>
+
+  <div class="container">
+
+    <a href="chat.html">
+  <div class="card">
+    <h3>💬 Chat</h3>
+    <p>Talk freely, just me and you.</p>
+  </div>
+</a>
+
+
+    <a href="love-notes.html">
+      <div class="card">
+        <h3>💌 Love Notes</h3>
+        <p>Write and read sweet messages.</p>
+      </div>
+    </a>
+
+    <a href="gallery.html">
+      <div class="card">
+        <h3>🖼️ Our Gallery</h3>
+        <p>Photos and shared memories.</p>
+      </div>
+    </a>
+
+    <a href="promises.html">
+      <div class="card">
+        <h3>🤞 Our Promises</h3>
+        <p>Words we swore to keep.</p>
+      </div>
+    </a>
+
+    <a href="story-chapters.html">
+      <div class="card">
+        <h3>📖 Our Story</h3>
+        <p>From the first text to forever.</p>
+      </div>
+    </a>
+
+    <a href="memories.html">
+      <div class="card">
+        <h3>🕰️ Old Memories</h3>
+        <p>Moments we’ll never forget.</p>
+      </div>
+    </a>
+
+    <a href="#" onclick="logout()">
+      <div class="card">
+        <h3>🚪 Log Out</h3>
+        <p>Leave EMAITHWORLD safely.</p>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="footer">
+    EMAITHWORLD • Built with love for you and me, Emmy & Faith 🌸
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    const user = localStorage.getItem("emaithUser");
+
+    if (!user) {
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("welcomeUser").textContent =
+      `Welcome back, ${user} 💖`;
+
+    function logout() {
+      localStorage.removeItem("emaithUser");
+      window.location.replace("login.html");
+    }
+
+    // Block back button
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = function () {
+      window.location.replace("index.html");
+    };
+  </script>
+
+</body>
+</html>

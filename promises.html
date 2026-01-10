@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Promises • EMAITHWORLD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #ffd6e8; /* Pink background */
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff0f5;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #e75480;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #d94370;
+    }
+    .promiseCard {
+      background: #ffe0f0;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    h1, h2 {
+      color: #e75480;
+    }
+    a.back {
+      display: inline-block;
+      margin-top: 15px;
+      color: #e75480;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🤞 Our Promises</h1>
+
+    <textarea id="promiseInput" placeholder="Write your promise here..."></textarea>
+    <button onclick="savePromise()">Save 💖</button>
+
+    <h2>All Promises:</h2>
+    <div id="promisesList"></div>
+
+    <a class="back" href="dashboard.html">Back to Dashboard</a>
+  </div>
+
+  <script type="module">
+    import { db } from './firebase.js';
+    import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const promisesCol = collection(db, 'promises');
+    const promisesList = document.getElementById('promisesList');
+    const promiseInput = document.getElementById('promiseInput');
+
+    async function savePromise() {
+      const text = promiseInput.value.trim();
+      if (!text) return alert("Please type something 🤞");
+
+      const user = localStorage.getItem("emaithUser") || "Anonymous";
+
+      await addDoc(promisesCol, {
+        author: user,
+        message: text,
+        createdAt: serverTimestamp()
+      });
+
+      promiseInput.value = '';
+      loadPromises();
+    }
+
+    async function loadPromises() {
+      promisesList.innerHTML = '';
+      const q = query(promisesCol, orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+
+      snapshot.forEach(doc => {
+        const promise = doc.data();
+        const div = document.createElement('div');
+        div.className = 'promiseCard';
+        div.innerHTML = `<strong>${promise.author}:</strong> ${promise.message}`;
+        promisesList.appendChild(div);
+      });
+    }
+
+    loadPromises();
+  </script>
+</body>
+</html>

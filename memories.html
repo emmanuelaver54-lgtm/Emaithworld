@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Memories • EMAITHWORLD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #ffd6e8; /* Pink background */
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff0f5;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #e75480;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #d94370;
+    }
+    .memoryCard {
+      background: #ffe0f0;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    h1, h2 {
+      color: #e75480;
+    }
+    a.back {
+      display: inline-block;
+      margin-top: 15px;
+      color: #e75480;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🕰️ Our Memories</h1>
+
+    <textarea id="memoryInput" placeholder="Write a memory here..."></textarea>
+    <button onclick="saveMemory()">Save Memory 💖</button>
+
+    <h2>All Memories:</h2>
+    <div id="memoriesList"></div>
+
+    <a class="back" href="dashboard.html">Back to Dashboard</a>
+  </div>
+
+  <script type="module">
+    import { db } from './firebase.js';
+    import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const memoriesCol = collection(db, 'ourMemories');
+    const memoriesList = document.getElementById('memoriesList');
+    const memoryInput = document.getElementById('memoryInput');
+
+    async function saveMemory() {
+      const text = memoryInput.value.trim();
+      if (!text) return alert("Please type something 🕰️");
+
+      const user = localStorage.getItem("emaithUser") || "Anonymous";
+
+      await addDoc(memoriesCol, {
+        author: user,
+        message: text,
+        createdAt: serverTimestamp()
+      });
+
+      memoryInput.value = '';
+      loadMemories();
+    }
+
+    async function loadMemories() {
+      memoriesList.innerHTML = '';
+      const q = query(memoriesCol, orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+
+      snapshot.forEach(doc => {
+        const memory = doc.data();
+        const div = document.createElement('div');
+        div.className = 'memoryCard';
+        div.innerHTML = `<strong>${memory.author}:</strong> ${memory.message}`;
+        memoriesList.appendChild(div);
+      });
+    }
+
+    loadMemories();
+  </script>
+</body>
+</html>

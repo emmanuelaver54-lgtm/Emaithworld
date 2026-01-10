@@ -1,0 +1,98 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #ffd6e8, #fff0f5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  text-align: center;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+h1 {
+  color: #e75480;
+  margin-bottom: 5px;
+}
+
+.tagline {
+  color: #555;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.writer-toggle {
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  font-size: 14px;
+  resize: none;
+  height: 60px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #e75480;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+button:hover {
+  background: #d94370;
+}
+
+.promises-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff0f5;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.promise {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.promise small {
+  display: block;
+  margin-top: 5px;
+  color: #888;
+  font-size: 12px;
+}
+
+.promise button {
+  margin-top: 8px;
+  background: #d94370;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.promise button:hover {
+  background: #e75480;
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login • EMAITHWORLD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e75480">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #ffd6e8, #fff0f5);
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 380px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    h1 {
+      color: #e75480;
+      margin-bottom: 20px;
+    }
+
+    select, input, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    button {
+      background: #e75480;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #d94370;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+    <h1>🌍 EMAITHWORLD</h1>
+
+    <select id="user">
+      <option value="">Who is logging in?</option>
+      <option value="Emmy">Emmy 💙</option>
+      <option value="Faith">Faith 🤍</option>
+    </select>
+
+    <input type="password" id="password" placeholder="Enter secret password">
+
+    <button onclick="login()">Enter</button>
+  </div>
+
+  <script>
+  function login() {
+    const user = document.getElementById("user").value;
+    const password = document.getElementById("password").value;
+
+    if (!user) {
+      alert("Please choose who is logging in 🤍");
+      return;
+    }
+
+    if (password !== "Emaithworld") {
+      alert("Incorrect password 💔");
+      return;
+    }
+
+    // Save login
+    localStorage.setItem("emaithUser", user);
+
+    // Go to dashboard
+    window.location.replace("dashboard.html");
+  }
+
+  // Prevent back button after login
+  window.history.pushState(null, null, window.location.href);
+  window.onpopstate = function () {
+    window.history.go(1);
+  };
+</script>
+
+
+</body>
+</html>
